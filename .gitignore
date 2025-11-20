@@ -1,0 +1,15 @@
+__pycache__/
+*.mp4
+*.jpg
+*.pt
+!model/best.pt
+runs/
+debug_*.py
+check_training
+diagnostic.py
+model_debug.py
+test_*.py
+create_test_video.py
+yolo11n.pt
+yolo11x.pt
+yolov8n.pt

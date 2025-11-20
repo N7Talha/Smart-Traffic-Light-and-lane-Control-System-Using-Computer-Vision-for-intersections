@@ -1,0 +1,18 @@
+names:
+- car
+- person
+- traffic_light
+- traffic_light_green
+- traffic_light_red
+- traffic_light_yellow
+nc: 6
+path: D:\Work\Atomcamp\Final Project\project_dataset_fixed
+roboflow:
+  license: MIT
+  project: udacity-ot6dx
+  url: https://universe.roboflow.com/class-03wox/udacity-ot6dx/dataset/1
+  version: 1
+  workspace: class-03wox
+test: D:\Work\Atomcamp\Final Project\project_dataset_fixed\test\images
+train: D:\Work\Atomcamp\Final Project\project_dataset_fixed\train\images
+val: D:\Work\Atomcamp\Final Project\project_dataset_fixed\val\images
