@@ -237,18 +237,54 @@ class VideoTrafficTester:
 
             cv2.putText(frame, f"Detected Cars: {car_count} | Persons: {person_count}", (10, 25),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+            
+ 
+    def test_image(self, image_path: str, output_path: str = None):
+        """
+        Run inference on a single image and optionally save the output.
+        """
+        image_path = image_path.replace('\\', '/')
+        if not os.path.exists(image_path):
+            print(f" Image file not found: {image_path}")
+            return
+
+        frame = cv2.imread(image_path)
+        if frame is None:
+            print(f" Could not read image: {image_path}")
+            return
+
+        processed_frame = self.process_frame(frame, frame_number=1)
+
+        # Show the image
+        cv2.imshow("Traffic System - Image Inference", processed_frame)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+
+        # Save if requested
+        if output_path:
+            output_path = output_path.replace('\\', '/')
+            cv2.imwrite(output_path, processed_frame)
+            print(f"Processed image saved to: {output_path}")
+
 
 
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description='Test Traffic System with Video')
+    parser = argparse.ArgumentParser(description='Test Traffic System with Video or Image')
     parser.add_argument('--model', type=str, required=True, help='Path to YOLO model (pt)')
-    parser.add_argument('--video', type=str, required=True, help='Path to video file')
-    parser.add_argument('--output', type=str, help='Optional output file to save annotated video')
+    parser.add_argument('--video', type=str, help='Path to video file')
+    parser.add_argument('--image', type=str, help='Path to image file')
+    parser.add_argument('--output', type=str, help='Optional output file to save annotated video or image')
     parser.add_argument('--conf', type=float, default=0.25, help='YOLO confidence threshold')
     parser.add_argument('--imgsz', type=int, default=640, help='YOLO image size')
     args = parser.parse_args()
 
     tester = VideoTrafficTester(args.model, conf=args.conf, imgsz=args.imgsz)
-    tester.test_video(args.video, args.output)
+
+    if args.video:
+        tester.test_video(args.video, args.output)
+    elif args.image:
+        tester.test_image(args.image, args.output)
+    else:
+        print("Please provide either a --video or --image path.")
