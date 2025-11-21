@@ -17,7 +17,7 @@ def ensure_dir(p: Path):
 
 
 # ------------------------------------------------------------
-# CLEAN + CORRECT CLASS REMAPPING FOR UDACTITY → 5 TARGET CLASSES
+# CORRECT CLASS REMAPPING FOR UDACTITY → 5 TARGET CLASSES
 # ------------------------------------------------------------
 
 def build_class_mapping(original_names, target_classes):

@@ -1,20 +1,4 @@
-"""
-traffic_logic_fixed.py
 
-Corrected TrafficLightController implementing:
- - Default all RED
- - If one lane >=15 and all others <5 -> that lane GREEN (preempts current green)
- - If all lanes <5 -> pick lane with most cars (even 1 car)
- - Only one green at a time
- - Max green = 25s -> then YELLOW 5s (blocking)
- - YELLOW (5s) is shown on transitions both for expiry and when switching lanes
- - Adaptive lane regions (4 quadrants by default)
- - Optional helper to set YOLO model class names so car/ped IDs are inferred
-
-Usage examples:
-  python traffic_logic_fixed.py --video 0
-  python traffic_logic_fixed.py --video traffic_intersection.mp4
-"""
 
 import time
 from typing import Dict, Tuple, List, Optional, Sequence
@@ -200,14 +184,14 @@ class TrafficLightController:
 
             # If green has expired -> perform expiry yellow (blocking), then clear current green to re-evaluate
             if elapsed >= self.max_green_time:
-                print(f"⏰ Green expired for lane {self.current_green_lane} (elapsed {elapsed:.1f}s). Switching to YELLOW for {self.yellow_duration}s.")
+                print(f" Green expired for lane {self.current_green_lane} (elapsed {elapsed:.1f}s). Switching to YELLOW for {self.yellow_duration}s.")
                 # show yellow
                 self.lane_states = {i: 'red' for i in range(1, self.num_lanes + 1)}
                 self.lane_states[self.current_green_lane] = 'yellow'
                 # blocking yellow
                 time.sleep(self.yellow_duration)
                 # after yellow -> set to red and clear
-                print(f"🟨 Yellow finished for lane {self.current_green_lane}. Setting RED and re-evaluating.")
+                print(f" Yellow finished for lane {self.current_green_lane}. Setting RED and re-evaluating.")
                 self.lane_states[self.current_green_lane] = 'red'
                 self.current_green_lane = None
                 self.green_start_time = None
@@ -226,11 +210,11 @@ class TrafficLightController:
 
                 if preempt_lane is not None:
                     # Preempt: show yellow on previous, then set previous to red and pick preempt lane
-                    print(f"⚠️ Preempting lane {self.current_green_lane} for lane {preempt_lane} (Rule A triggered). Showing YELLOW for {self.yellow_duration}s.")
+                    print(f" Preempting lane {self.current_green_lane} for lane {preempt_lane} (Rule A triggered). Showing YELLOW for {self.yellow_duration}s.")
                     self.lane_states = {i: 'red' for i in range(1, self.num_lanes + 1)}
                     self.lane_states[self.current_green_lane] = 'yellow'
                     time.sleep(self.yellow_duration)
-                    print(f"🟨 Preemption yellow finished. Switching to lane {preempt_lane}.")
+                    print(f" Preemption yellow finished. Switching to lane {preempt_lane}.")
                     self.lane_states[self.current_green_lane] = 'red'
                     # clear so selection below behaves like "no current green"
                     self.current_green_lane = None
